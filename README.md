@@ -18,11 +18,11 @@ NiFi's configuration is very complex, consisting of many separate files in more 
 
 Yet, in order to leverage the deployment possibilities of this image, without depending exclusively on static configuration, an alternative is available.
 
-You can provide config file templates to be rendered at *runtime* by image's *entrypoint* script. The advantage of this method is to able to provide some parameters via (user-defined) enviroment variables - which may contain sensitive information or that varies quite frequently - letting them to be interpolated in runtime, instead of hardcoding those values in files. Besides it, users can write their own template sets, along with pre-defined enviroment variables for specific scenarios, almost like a "configuration template/flavor", all this without having to modify the actual Docker image.
+You can provide config file templates to be rendered at *runtime* by image's *entrypoint* script. The advantage of this method is to able to provide some parameters via (user-defined) enviroment variables - which may contain sensitive information or that varies quite frequently - letting them to be interpolated in runtime, instead of hardcoding those values in files. Besides it, users can write their own template sets, along with pre-defined enviroment variables for specific scenarios, almost like a _"configuration flavor"_, all this without having to modify the actual Docker image.
 
-All files with extension `.tpl` found in `opt/nifi/nifi-current/conf` will be rendered (output to the same path, with the same name without `.tpl` extension).
+All files with extension `.tpl` found in `opt/nifi/nifi-current/conf` will be rendered before the application is started - they will be output to the same path, with the same name (only without the `.tpl`).
 
-The image uses [*gomplate*](https://docs.gomplate.ca/) to interpolate templates, so they must be in [*Go Template*](https://golang.org/pkg/text/template/) format.
+The image uses [*gomplate*](https://docs.gomplate.ca/) to interpolate templates, so **template must be in [*Go*](https://golang.org/pkg/text/template/) format**.
 
 For example:
 
@@ -33,12 +33,19 @@ server.2=node2.{{ .Env.MYDOMAIN }}:2888:3888;2181
 server.3=node3.{{ .Env.MYDOMAIN }}:2888:3888;2181
 ```
 
-... could be passed to container as ...
+... could be passed to container as volumed file (like below) ...
 ```
 docker run --rm --name nifi -p 8443:8443 -p 8080:8080 -p 8000:8000 -v ${PWD}/zookeeper.properties.tpl:/opt/nifi/nifi-current/cof/zookeeper.properties.tpl -e MYDOMAIN=foo.bar nifi
 ```
 
 ... resulting in the following output ...
+```
+server.1=node1.foo.bar:2888:3888;2181
+server.2=node2.foo.bar:2888:3888;2181
+server.3=node3.foo.bar:2888:3888;2181
+```
+
+Its interpolation will be informed in container startup log, like:
 ```
 Generated config file from template in /opt/nifi/nifi-current/conf/zookeeper.properties
 ```
