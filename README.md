@@ -1,6 +1,6 @@
 # docker-nifi
 
-This is a simpler version of Nifi Docker image, when compared to the [official image](https://hub.docker.com/r/apache/nifi/). It avoids all the Bash tricks (config generation in runtime via find-and-replace in files, sending proccess to background and other not cool stuff), and instead only assembles Java line command and runs it attached to container original proccess.
+This *vanilla* Nifi Docker image, much simpler than the [official one](https://hub.docker.com/r/apache/nifi/). It avoids all those *Bash* tricks - config generation in runtime via *find-and-replace* in files, proccess sent to background and other not cool stuff. Instead, it only assembles Java line command and runs the proccess directly attached to the container.
 
 Configuration files included in the image are the ones shipped along with the official package. All user custom configuration must be made via Docker volumes.
 
