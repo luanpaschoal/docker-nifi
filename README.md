@@ -14,11 +14,11 @@ The only and few enviroment variables accepted by this image are:
 
 ## Custom configuration
 
-NiFi's configuration is very complex, consisting of many separate file in more than one format. So, providing pre-defined enviroment variables for every possible option and scenario is nearly impossible (specially when considering structured files like XMLs.)
+NiFi's configuration is very complex, consisting of many separate files in more than one format. So, providing pre-defined enviroment variables for every possible scenario is nearly impossible (specially when considering structured files like XMLs.)
 
-Yet, in order to leverage the deployment possibilies of this image, without depending exclusively on static configuration, an alternative is available.
+Yet, in order to leverage the deployment possibilities of this image, without depending exclusively on static configuration, an alternative is available.
 
-You can provide config file templates to be rendered at runtime by the image's entrypoint script. The advantage of it is to provide some parameters via user-defined enviroment variables - which may contain sensitive information o vary quite frequently - letting them to be interpolated in runtime, instead of hardcoding those values in files. Besides it, users can provided their own template sets, which would take a given set of pre-defined enviroment variables for any scenarios, without having to modify the actual Docker image. 
+You can provide config file templates to be rendered at *runtime* by image's *entrypoint* script. The advantage of this method is to able to provide some parameters via (user-defined) enviroment variables - which may contain sensitive information or that varies quite frequently - letting them to be interpolated in runtime, instead of hardcoding those values in files. Besides it, users can write their own template sets, along with pre-defined enviroment variables for specific scenarios, almost like a "configuration template/flavor", all this without having to modify the actual Docker image.
 
 All files with extension `.tpl` found in `opt/nifi/nifi-current/conf` will be rendered (output to the same path, with the same name without `.tpl` extension).
 
