@@ -1,10 +1,10 @@
 # docker-nifi
 
-This *vanilla* Nifi Docker image, much simpler than the [official one](https://hub.docker.com/r/apache/nifi/). It avoids all those *Bash* tricks - config generation in runtime via *find-and-replace* in files, proccess sent to background and other not cool stuff. Instead, it only assembles Java line command and runs the proccess directly attached to the container.
+This is a *vanilla* [NiFi](https://nifi.apache.org/) Docker image, much simpler than the [official one](https://hub.docker.com/r/apache/nifi/). It avoids all those *Bash* tricks - config generation in runtime via *find-and-replace* in files, proccess sent to background and other not cool stuff - and, instead, only assembles Java line command and runs the proccess directly attached to the container.
 
-Configuration files included in the image are the ones shipped along with the official package. All user custom configuration must be made via Docker volumes.
+Configuration files included in this image are the ones shipped along with the official package. All user custom configuration must be made via Docker volumes.
 
-Nifi's files are under `/opt/nifi/nifi-current`, so default path for configuration files is `/opt/nifi/nifi-current/conf`.
+NiFi's files are under `/opt/nifi/nifi-current`, so the default path for configuration files is `/opt/nifi/nifi-current/conf`.
 
 The only and few enviroment variables accepted by this image are:
 
@@ -14,11 +14,11 @@ The only and few enviroment variables accepted by this image are:
 
 ## Custom configuration
 
-NiFi's configuration is very complex, consisting of many separate file in more than a single format. So, providing pre-defined enviroment variables for every options and scenario is nearly impossible (specially when considering structured files like XMLs.)
+NiFi's configuration is very complex, consisting of many separate file in more than one format. So, providing pre-defined enviroment variables for every possible option and scenario is nearly impossible (specially when considering structured files like XMLs.)
 
-Yet, in order to leverage the deployment possibilies of this image, without depending exclusively on static configuration, an alternative is provided.
+Yet, in order to leverage the deployment possibilies of this image, without depending exclusively on static configuration, an alternative is available.
 
-You can provide config-file templates to be rendered at runtime by the image's entrypoint script. The advantage of it is to use user-defined enviroment variables, which may contain sensitive information, and let this to be  interpolated in runtime, instead of leaving this content statically set. Besides it, users can provided their own template sets, which would take a given set of pre-defined enviroment variables for any scenarios, without having to modify the actual Docker image.
+You can provide config file templates to be rendered at runtime by the image's entrypoint script. The advantage of it is to provide some parameters via user-defined enviroment variables - which may contain sensitive information o vary quite frequently - letting them to be interpolated in runtime, instead of hardcoding those values in files. Besides it, users can provided their own template sets, which would take a given set of pre-defined enviroment variables for any scenarios, without having to modify the actual Docker image. 
 
 All files with extension `.tpl` found in `opt/nifi/nifi-current/conf` will be rendered (output to the same path, with the same name without `.tpl` extension).
 
