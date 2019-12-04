@@ -43,6 +43,10 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     && apt-get update \
     && apt-get install -y jq xmlstarlet procps
 
+RUN curl -fSL https://github.com/hairyhenderson/gomplate/releases/download/v3.6.0/gomplate_linux-amd64 \
+      -o /usr/local/bin/gomplate \
+    && chmod 755 /usr/local/bin/gomplate
+
 USER nifi
 
 # Download, validate, and expand Apache NiFi Toolkit binary.
@@ -92,4 +96,4 @@ WORKDIR ${NIFI_HOME}
 # Also we need to use relative path, because the exec form does not invoke a command shell,
 # thus normal shell processing does not happen:
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
-CMD ["/opt/nifi/nifi-current/bin/entrypoint.sh"]
+CMD ["bin/entrypoint.sh"]
