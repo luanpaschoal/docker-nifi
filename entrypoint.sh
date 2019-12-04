@@ -13,14 +13,14 @@ if [ ! -z "${JVM_HEAP_MAX}" ]; then
   JAVA_OPTS="${JAVA_OPTS} -Xmx${JVM_HEAP_MAX}"
 fi
 
-JAVA_OPTS="${JAVA_OPTS} -Dorg.apache.jasper.compiler.disablejsr199=true -Djavax.security.auth.useSubjectCredsOnly=true -Djava.security.egd=file:/dev/urandom -Dsun.net.http.allowRestrictedHeaders=true -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true -Djava.protocol.handler.pkgs=sun.net.www.protocol -Dnifi.bootstrap.listen.port=41491 -Dorg.apache.nifi.bootstrap.config.log.dir=/opt/nifi/nifi-current/logs"
+JAVA_OPTS="${JAVA_OPTS} -Dorg.apache.jasper.compiler.disablejsr199=true -Djavax.security.auth.useSubjectCredsOnly=true -Djava.security.egd=file:/dev/urandom -Dsun.net.http.allowRestrictedHeaders=true -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true -Djava.protocol.handler.pkgs=sun.net.www.protocol -Dorg.apache.nifi.bootstrap.config.log.dir=/opt/nifi/nifi-current/logs"
 
 for file in ${CONF_DIR}/*.tpl; do
   out_file=${file%%.tpl}
   gomplate -f ${file} -o ${out_file} && echo "Generated config file from template in ${out_file}"
 done
 
-JAVA_CMD="java -classpath ${CLASSPATH} -Dnifi.properties.file.path=${NIFI_HOME}/conf/nifi.properties org.apache.nifi.NiFi"
+JAVA_CMD="java -classpath ${CLASSPATH} -Dnifi.properties.file.path=${NIFI_HOME}/conf/nifi.properties ${JAVA_OPTS} org.apache.nifi.NiFi"
 
 echo "Launching NiFi with the following command: ${JAVA_CMD}"
 exec $JAVA_CMD

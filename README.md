@@ -12,6 +12,8 @@ The only and few enviroment variables accepted by this image are:
 - `JVM_HEAP_MAX`  - JVM maximum heap size (`-Xmx`)
 - `JAVA_OPTS` - JVM extra options
 
+**This image does not use _NiFi Bootstrapper_**.
+
 ## Custom configuration
 
 NiFi's configuration is very complex, consisting of many separate files in more than one format. So, providing pre-defined enviroment variables for every possible scenario is nearly impossible (specially when considering structured files like XMLs.)
@@ -26,7 +28,7 @@ The image uses [*gomplate*](https://docs.gomplate.ca/) to interpolate templates,
 
 For example:
 
-A template named _zookeeper.properties.tpl_ ...
+A template named `zookeeper.properties.tpl` ...
 ```
 server.1=node1.{{ .Env.MYDOMAIN }}:2888:3888;2181
 server.2=node2.{{ .Env.MYDOMAIN }}:2888:3888;2181
