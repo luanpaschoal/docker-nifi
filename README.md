@@ -55,3 +55,7 @@ The *entrypoint* scripts points out every interpolated file in container startup
 ```
 Generated config file from template in /opt/nifi/nifi-current/conf/zookeeper.properties
 ```
+
+## Logs
+
+*NiFi* is not very container friendly, and does not log to standard output, as usual nowadays. Logs are written to filesystem, in more than one file. *So, remember to export the container path `/opt/nifi/nifi-current/logs` via volume*, so logs won't be written to container's filesystem. (In production, a sidecar container would also be needed, to send log content to indexing systems, etc.)
