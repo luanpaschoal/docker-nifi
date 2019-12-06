@@ -59,3 +59,15 @@ Generated config file from template in /opt/nifi/nifi-current/conf/zookeeper.pro
 ## Logs
 
 *NiFi* is not very container friendly, and does not log to standard output, as usual nowadays. Logs are written to filesystem, in more than one file. **So, remember to export the container path `/opt/nifi/nifi-current/logs` via volume**, so logs won't be written to container's filesystem. (In production, a sidecar container would also be needed, to send log content to indexing systems, etc.)
+
+## HTTPS
+
+NiFi uses Java certificate files (*PKCS12*, *JKS*) to enable HTTPS and also as a last-effort client authentication (two-way SSL). Certificates used for server-side encryption are called `keystore` and client trusted certificates used for authentication are called `truststore` in configuration.
+
+In order to make it easy to generated ***keystore*** in runtime, a helper script is provided under `/opt/nifi/nifi-current/bin/generate-keystore.sh`. It can be used to convert an already existent PEM key-pair to *JKS* format.
+
+```
+/opt/nifi/nifi-current/bin/generate-keystore.sh <path_to_certificate_pem> <path_to_key_pem> <output_path>
+```
+
+If files are not in place, self-signed key-pair is generated.
