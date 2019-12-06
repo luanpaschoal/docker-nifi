@@ -73,6 +73,7 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
 
 ADD entrypoint.sh ${NIFI_HOME}/bin/entrypoint.sh
+COPY scripts/* ${NIFI_HOME}/bin/
 
 VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/conf \
