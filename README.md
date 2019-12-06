@@ -26,7 +26,7 @@ Yet, in order to leverage the deployment possibilities of this image, without de
 
 It is possible to provide configuration file templates to be rendered at *runtime* by image's *entrypoint* script. The advantage of this method is to able to provide some parameters via (user-defined) enviroment variables - which may contain sensitive information or that varies quite frequently - letting them to be interpolated in every time a container is created, instead of hardcoding those values in files. This empowers users so they can write their own template sets, along with pre-defined enviroment variables for their own scenarios, almost like a _"configuration flavor"_ - all this without having to modify the actual image. [Helm charts](https://helm.sh/docs/topics/charts/) can be useful for that.
 
-All files with extension `.tpl` found in `opt/nifi/nifi-current/conf` will be rendered before the application is started - they will be output to the same path, with the same name (without the `.tpl` extension).
+All files with extension `.tpl` found in `opt/nifi/nifi-current/conf/templates` will be rendered before the application is started - they will be output to the config path, with the same name (without the `.tpl` extension).
 
 The image uses [*gomplate*](https://docs.gomplate.ca/) to render templates, so **.tpl files must be in [*Go Template*](https://golang.org/pkg/text/template/) format**.
 
