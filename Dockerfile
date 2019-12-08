@@ -47,6 +47,10 @@ RUN curl -fSL https://github.com/hairyhenderson/gomplate/releases/download/v3.6.
       -o /usr/local/bin/gomplate \
     && chmod 755 /usr/local/bin/gomplate
 
+RUN curl -fSL https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 \
+      -o /usr/local/bin/jq \
+    && chmod 755 /usr/local/bin/jq
+
 USER nifi
 
 # Download, validate, and expand Apache NiFi Toolkit binary.
