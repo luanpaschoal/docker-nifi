@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 CONF_DIR="${NIFI_HOME}/conf"
 CLASSPATH=$(ls -1 ${NIFI_HOME}/lib/*.jar | tr '\n' ':')
