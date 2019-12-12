@@ -4,10 +4,8 @@
 # This is a helper script to generate certificate in runtime to enable HTTPS in NiFi,
 # useful for setups with dynamic certificates, like Let's Encrypt, etc.
 #
-# It only cares about server-side certificates (a.k.a. keystore). Truststore is also
-# provided, but only to keep compatibility with default configurations that expects it.
-# If PEM certificate key-pair is provided, keystore is created with it. If not, a
-# self-signed pair is generated.
+# If PEM certificate key-pair is provided, keystore/truststore are created with it.
+# If not, a self-signed pair is generated.
 #
 # Also, the password is dummy, and not supposed to protect key, but only provided because
 # it is a requirement. At the end of the day, we only want SSL encryption enabled, not
