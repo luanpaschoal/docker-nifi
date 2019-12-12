@@ -22,10 +22,11 @@ out_dir=${3:-/opt/nifi/nifi-current/conf}
 PASSWORD="nifinifi"
 
 if [ -f ${cert} -a -f ${key} ]; then
-  openssl pkcs12 -export -in ${cert} -inkey ${key} -passout "pass:${PASSWORD}" -name nifi > /tmp/nifi.p12
+  openssl pkcs12 -export -in ${cert} -inkey ${key} -passout "pass:${PASSWORD}" -name nifi-key > /tmp/nifi.p12 && \
   keytool -importkeystore -srckeystore /tmp/nifi.p12 -destkeystore ${out_dir}/keystore.jks -noprompt \
-    -srcstoretype pkcs12 -alias nifi -deststorepass ${PASSWORD} -srcstorepass ${PASSWORD} && \
-  cp ${out_dir}/keystore.jks ${out_dir}/truststore.jks && \
+    -srcstoretype pkcs12 -alias nifi-key -deststorepass ${PASSWORD} -srcstorepass ${PASSWORD} && \
+  keytool -import -alias nifi-cert -file ${cert} -keystore ${out_dir}/truststore.jks \
+    -deststorepass ${PASSWORD} -noprompt && \
   echo -e "\nWritten files: ${out_dir}/keystore.jks and ${out_dir}/truststore.jks with password '${PASSWORD}'."
 else
   echo "Certificates not found. Auto-generating key-pair."
