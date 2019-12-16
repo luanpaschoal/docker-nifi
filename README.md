@@ -67,7 +67,9 @@ NiFi uses Java certificate files (*PKCS12*, *JKS*) to enable HTTPS and also as a
 In order to make it easy to generated ***keystore*** in runtime, a helper script is provided under `/opt/nifi/nifi-current/bin/generate-keystore.sh`. It can be used to convert an already existent PEM key-pair to *JKS* format.
 
 ```
-/opt/nifi/nifi-current/bin/generate-keystore.sh <path_to_certificate_pem> <path_to_key_pem> <output_path>
+/opt/nifi/nifi-current/bin/generate-keystore.sh <path_to_certificate_pem> <path_to_key_pem> <path_to_ca_certificate_pem> <output_path>
 ```
 
 If files are not in place, self-signed key-pair is generated.
+
+**IMPORTANT: this method of using an already existent certificate is known to not work properly with a cluster setup, where nodes need to comunicate with each other** (because hostnames must match certificate's CN and other SSL requirements). In setups like that, it is recommend to use [NiFi's TLS Toolkit](https://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html#tls_toolkit) to run a dedicated *CA Server* and sign nodes certificates at boot time.
