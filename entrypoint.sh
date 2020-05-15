@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 CONF_DIR="${NIFI_HOME}/conf"
 CLASSPATH=$(find ${NIFI_HOME}/lib -type f | tr '\n' ':')
@@ -19,7 +18,12 @@ JAVA_OPTS="${JAVA_OPTS} -Dorg.apache.jasper.compiler.disablejsr199=true -Djavax.
 if [ -d ${CONF_DIR}/templates ]; then
   for file in $(ls -1 ${CONF_DIR}/templates | grep -E '\.tpl$'); do
     out_file=${file%%.tpl}
-    gomplate -f ${CONF_DIR}/templates/${file} -o ${CONF_DIR}/${out_file} && echo "Generated config file from template in ${CONF_DIR}/${out_file}"
+    gomplate -f ${CONF_DIR}/templates/${file} -o ${CONF_DIR}/${out_file}
+    if [ $? -ne 0 ]; then
+      echo "Error rendering config template file ${CONF_DIR}/${out_file}. Aborting."
+      exit 1
+    fi
+    echo "Generated config file from template in ${CONF_DIR}/${out_file}"
   done
 fi
 
