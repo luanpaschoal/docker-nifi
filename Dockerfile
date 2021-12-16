@@ -16,7 +16,7 @@
 # under the License.
 #
 
-FROM openjdk:11-jre
+FROM openjdk:8-jre
 LABEL maintainer="Apache NiFi <dev@nifi.apache.org>"
 LABEL site="https://nifi.apache.org"
 
