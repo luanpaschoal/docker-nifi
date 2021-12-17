@@ -22,11 +22,15 @@ LABEL site="https://nifi.apache.org"
 
 ARG UID=1000
 ARG GID=1000
-ARG NIFI_VERSION=1.15.0
+ARG NIFI_VERSION=1.13.2
 ARG BASE_URL=https://archive.apache.org/dist
 ARG MIRROR_BASE_URL=${MIRROR_BASE_URL:-${BASE_URL}}
 ARG NIFI_BINARY_PATH=${NIFI_BINARY_PATH:-/nifi/${NIFI_VERSION}/nifi-${NIFI_VERSION}-bin.zip}
 ARG NIFI_TOOLKIT_BINARY_PATH=${NIFI_TOOLKIT_BINARY_PATH:-/nifi/${NIFI_VERSION}/nifi-toolkit-${NIFI_VERSION}-bin.zip}
+ARG MYSQL_DRIVER=mysql-connector-java-8.0.27
+ARG MYSQL_DRIVER_URL=https://dev.mysql.com/get/Downloads/Connector-J/${MYSQL_DRIVER}.zip
+ARG POSTGRESQL_DRIVER=postgresql-42.3.1
+ARG POSTGRESQL_DRIVER_URL=https://jdbc.postgresql.org/download/${POSTGRESQL_DRIVER}.jar
 
 ENV NIFI_BASE_DIR=/opt/nifi
 ENV NIFI_HOME ${NIFI_BASE_DIR}/nifi-current
@@ -76,6 +80,12 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && mkdir -p ${NIFI_LOG_DIR} \
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
 
+# Download and store database drivers
+RUN mkdir -p ${NIFI_HOME}/drivers \
+    && curl -fSL ${MYSQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${MYSQL_DRIVER}.zip \
+    && unzip -j ${NIFI_HOME}/drivers/${MYSQL_DRIVER}.zip ${MYSQL_DRIVER}/${MYSQL_DRIVER}.jar -d ${NIFI_HOME}/drivers \
+    && curl -fSL ${POSTGRESQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${POSTGRESQL_DRIVER}.jar
+
 ADD entrypoint.sh ${NIFI_HOME}/bin/entrypoint.sh
 COPY scripts/* ${NIFI_HOME}/bin/
 
@@ -85,7 +95,8 @@ VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/flowfile_repository \
        ${NIFI_HOME}/content_repository \
        ${NIFI_HOME}/provenance_repository \
-       ${NIFI_HOME}/state
+       ${NIFI_HOME}/state \
+       ${NIFI_HOME}/drivers
 
 # Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000 8000
@@ -102,3 +113,4 @@ WORKDIR ${NIFI_HOME}
 # thus normal shell processing does not happen:
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
 CMD ["bin/entrypoint.sh"]
+ 
