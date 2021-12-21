@@ -1,0 +1,23 @@
+clone:
+  clone:
+    image: plugins/git
+    depth: 20
+
+pipeline:
+  publish-latest:
+    image: quintoandar/drone-gcr
+    pull: true
+    repo: quintohub/nifi
+    tag: ['latest']
+    when:
+      event: push
+      branch: [ master ]
+
+  publish-tag:
+    image: quintoandar/drone-gcr
+    pull: true
+    repo: quintohub/nifi
+    tag: ['${DRONE_TAG}']
+    when:
+      event: tag
+      branch: [ master ]
