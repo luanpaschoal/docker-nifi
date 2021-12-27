@@ -43,7 +43,7 @@ ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
 RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
     && useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi \
     && mkdir -p ${NIFI_BASE_DIR} \
-    && chown -R 777 ${NIFI_BASE_DIR} \
+    && chmod -R 777 ${NIFI_BASE_DIR} \
     && apt-get update \
     && apt-get install -y jq xmlstarlet procps
 
