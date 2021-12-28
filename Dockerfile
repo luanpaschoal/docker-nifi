@@ -72,11 +72,11 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && rm ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}-bin.zip \
     && mv ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION} ${NIFI_HOME} \
     # && mkdir -p ${NIFI_HOME}/conf \
-    && mkdir -p ${NIFI_HOME}/database_repository \
-    && mkdir -p ${NIFI_HOME}/flowfile_repository \
-    && mkdir -p ${NIFI_HOME}/content_repository  \
-    && mkdir -p ${NIFI_HOME}/provenance_repository \
-    && mkdir -p ${NIFI_HOME}/state  \
+    # && mkdir -p ${NIFI_HOME}/database_repository \
+    # && mkdir -p ${NIFI_HOME}/flowfile_repository \
+    # && mkdir -p ${NIFI_HOME}/content_repository  \
+    # && mkdir -p ${NIFI_HOME}/provenance_repository \
+    # && mkdir -p ${NIFI_HOME}/state  \
     && mkdir -p ${NIFI_LOG_DIR} \
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
 
@@ -84,7 +84,7 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
 RUN mkdir -p ${NIFI_HOME}/drivers -m 777 \
     && curl -fSL ${MYSQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${MYSQL_DRIVER}.zip \
     && unzip -j ${NIFI_HOME}/drivers/${MYSQL_DRIVER}.zip ${MYSQL_DRIVER}/${MYSQL_DRIVER}.jar -d ${NIFI_HOME}/drivers \
-    && curl -fSL ${POSTGRESQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${POSTGRESQL_DRIVER}.jar
+    && curl -fSL ${POSTGRESQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${POSTGRESQL_DRIVER}.jar \
     && chmod -R 777 ${NIFI_HOME}
 
 ADD entrypoint.sh ${NIFI_HOME}/bin/entrypoint.sh
@@ -92,11 +92,11 @@ COPY scripts/* ${NIFI_HOME}/bin/
 
 VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/conf \
-       ${NIFI_HOME}/database_repository \
-       ${NIFI_HOME}/flowfile_repository \
-       ${NIFI_HOME}/content_repository \
-       ${NIFI_HOME}/provenance_repository \
-       ${NIFI_HOME}/state \
+       # ${NIFI_HOME}/database_repository \
+       # ${NIFI_HOME}/flowfile_repository \
+       # ${NIFI_HOME}/content_repository \
+       # ${NIFI_HOME}/provenance_repository \
+       # ${NIFI_HOME}/state \
        ${NIFI_HOME}/drivers
 
 # Web HTTP(s) & Socket Site-to-Site Ports
