@@ -69,24 +69,13 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && rm ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}-bin.zip \
     && mv ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION} ${NIFI_HOME} \
     && mkdir -p ${NIFI_HOME}/conf \
-    && mkdir -p ${NIFI_HOME}/database_repository \
-    && mkdir -p ${NIFI_HOME}/flowfile_repository \
-    && mkdir -p ${NIFI_HOME}/content_repository \
-    && mkdir -p ${NIFI_HOME}/provenance_repository \
-    && mkdir -p ${NIFI_HOME}/state \
     && mkdir -p ${NIFI_LOG_DIR} \
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION} \
-    && chmod -R g+rwX ${NIFI_HOME}
-
-# Download and store database drivers
-RUN mkdir -p ${NIFI_HOME}/conf/drivers \
+    && mkdir -p ${NIFI_HOME}/conf/drivers \
     && curl -fSL ${MYSQL_DRIVER_URL} -o ${NIFI_HOME}/conf/drivers/${MYSQL_DRIVER}.zip \
     && unzip -j ${NIFI_HOME}/conf/drivers/${MYSQL_DRIVER}.zip ${MYSQL_DRIVER}/${MYSQL_DRIVER}.jar -d ${NIFI_HOME}/conf/drivers \
     && curl -fSL ${POSTGRESQL_DRIVER_URL} -o ${NIFI_HOME}/conf/drivers/${POSTGRESQL_DRIVER}.jar \
-    && chmod -R 777 ${NIFI_HOME}
-
-# ADD entrypoint.sh ${NIFI_HOME}/bin/entrypoint.sh
-# COPY scripts/* ${NIFI_HOME}/bin/
+    && chmod -R g+rwX ${NIFI_HOME}
 
 ADD bootstrap.conf ${NIFI_HOME}/conf/bootstrap.conf
 
@@ -109,6 +98,4 @@ USER 1001
 # Also we need to use relative path, because the exec form does not invoke a command shell,
 # thus normal shell processing does not happen:
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
-# CMD ["bin/entrypoint.sh"]
- 
-ENTRYPOINT ["../scripts/start.sh"]
+ENTRYPOINT ["./scripts/start.sh"]
