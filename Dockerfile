@@ -49,11 +49,11 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
 
 RUN curl -fSL https://github.com/hairyhenderson/gomplate/releases/download/v3.6.0/gomplate_linux-amd64 \
       -o /usr/local/bin/gomplate \
-    && chmod 755 /usr/local/bin/gomplate
+    && chmod 775 /usr/local/bin/gomplate
 
 RUN curl -fSL https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 \
       -o /usr/local/bin/jq \
-    && chmod 755 /usr/local/bin/jq
+    && chmod 775 /usr/local/bin/jq
 
 USER nifi
 
@@ -71,20 +71,21 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && unzip ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}-bin.zip -d ${NIFI_BASE_DIR} \
     && rm ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}-bin.zip \
     && mv ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION} ${NIFI_HOME} \
-    && mkdir -p ${NIFI_HOME}/conf \
+    # && mkdir -p ${NIFI_HOME}/conf \
     && mkdir -p ${NIFI_HOME}/database_repository \
     && mkdir -p ${NIFI_HOME}/flowfile_repository \
-    && mkdir -p ${NIFI_HOME}/content_repository \
+    && mkdir -p ${NIFI_HOME}/content_repository  \
     && mkdir -p ${NIFI_HOME}/provenance_repository \
-    && mkdir -p ${NIFI_HOME}/state \
+    && mkdir -p ${NIFI_HOME}/state  \
     && mkdir -p ${NIFI_LOG_DIR} \
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
 
 # Download and store database drivers
-RUN mkdir -p ${NIFI_HOME}/drivers \
+RUN mkdir -p ${NIFI_HOME}/drivers -m 777 \
     && curl -fSL ${MYSQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${MYSQL_DRIVER}.zip \
     && unzip -j ${NIFI_HOME}/drivers/${MYSQL_DRIVER}.zip ${MYSQL_DRIVER}/${MYSQL_DRIVER}.jar -d ${NIFI_HOME}/drivers \
     && curl -fSL ${POSTGRESQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${POSTGRESQL_DRIVER}.jar
+    && chmod -R 777 ${NIFI_HOME}
 
 ADD entrypoint.sh ${NIFI_HOME}/bin/entrypoint.sh
 COPY scripts/* ${NIFI_HOME}/bin/
