@@ -37,7 +37,7 @@ ENV NIFI_HOME ${NIFI_BASE_DIR}/nifi-current
 ENV NIFI_TOOLKIT_HOME ${NIFI_BASE_DIR}/nifi-toolkit-current
 
 ENV NIFI_PID_DIR=${NIFI_HOME}/run
-ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
+ENV NIFI_LOG_DIR=${NIFI_HOME}/conf/logs
 
 # Setup NiFi user and create necessary directories
 RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
@@ -81,23 +81,14 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
 
 # Download and store database drivers
-RUN mkdir -p ${NIFI_HOME}/drivers -m 777 \
-    && curl -fSL ${MYSQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${MYSQL_DRIVER}.zip \
-    && unzip -j ${NIFI_HOME}/drivers/${MYSQL_DRIVER}.zip ${MYSQL_DRIVER}/${MYSQL_DRIVER}.jar -d ${NIFI_HOME}/drivers \
-    && curl -fSL ${POSTGRESQL_DRIVER_URL} -o ${NIFI_HOME}/drivers/${POSTGRESQL_DRIVER}.jar \
+RUN mkdir -p ${NIFI_HOME}/conf/drivers \
+    && curl -fSL ${MYSQL_DRIVER_URL} -o ${NIFI_HOME}/conf/drivers/${MYSQL_DRIVER}.zip \
+    && unzip -j ${NIFI_HOME}/conf/drivers/${MYSQL_DRIVER}.zip ${MYSQL_DRIVER}/${MYSQL_DRIVER}.jar -d ${NIFI_HOME}/conf/drivers \
+    && curl -fSL ${POSTGRESQL_DRIVER_URL} -o ${NIFI_HOME}/conf/drivers/${POSTGRESQL_DRIVER}.jar \
     && chmod -R 777 ${NIFI_HOME}
 
 ADD entrypoint.sh ${NIFI_HOME}/bin/entrypoint.sh
 COPY scripts/* ${NIFI_HOME}/bin/
-
-VOLUME ${NIFI_LOG_DIR} \
-       ${NIFI_HOME}/conf \
-       # ${NIFI_HOME}/database_repository \
-       # ${NIFI_HOME}/flowfile_repository \
-       # ${NIFI_HOME}/content_repository \
-       # ${NIFI_HOME}/provenance_repository \
-       # ${NIFI_HOME}/state \
-       ${NIFI_HOME}/drivers
 
 # Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000 8000
