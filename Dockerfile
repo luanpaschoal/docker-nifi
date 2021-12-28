@@ -21,7 +21,7 @@ LABEL maintainer="Apache NiFi <dev@nifi.apache.org>"
 LABEL site="https://nifi.apache.org"
 
 ARG UID=1000
-ARG GID=1000
+ARG GID=0
 ARG NIFI_VERSION=1.15.2
 ARG BASE_URL=https://archive.apache.org/dist
 ARG MIRROR_BASE_URL=${MIRROR_BASE_URL:-${BASE_URL}}
