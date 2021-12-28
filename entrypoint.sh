@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if ! whoami &> /dev/null; then
+  if [ -w /etc/passwd ]; then
+    echo "${USER_NAME:-nifi}:x:$(id -u):0:${USER_NAME:-nifi} user:${HOME}:/sbin/nologin" >> /etc/passwd
+  fi
+fi
+
 CONF_DIR="${NIFI_HOME}/conf"
 CLASSPATH=$(find ${NIFI_HOME}/lib -type f | tr '\n' ':')
 CLASSPATH="${CLASSPATH}${CONF_DIR}"
