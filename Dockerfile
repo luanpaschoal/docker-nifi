@@ -98,4 +98,4 @@ USER 1001
 # Also we need to use relative path, because the exec form does not invoke a command shell,
 # thus normal shell processing does not happen:
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
-ENTRYPOINT ["./scripts/start.sh"]
+ENTRYPOINT ["scripts/start.sh"]
